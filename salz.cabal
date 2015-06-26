@@ -1,4 +1,4 @@
-name:                steinsalz
+name:                salz
 version:             0.1.0.0
 synopsis:            A standalone wrapper around the crypto library Sodium.
 description:
@@ -10,7 +10,7 @@ description:
   the git-repository includes `libsodium` only as a submodule. Build it
   from the repository if you don't trust me! The actual binding code
   can be reviewed for innocence with little effort.
-homepage:            https://github.com/lpeterse/haskell-steinsalz
+homepage:            https://github.com/lpeterse/haskell-salz
 license:             MIT
 license-file:        LICENSE
 author:              Lars Petersen
@@ -27,9 +27,7 @@ cabal-version:       >=1.10
 library
   ghc-options:         -Wall
   cc-options:          -O2 -DHAVE_TI_MODE
-  exposed-modules:     Crypto.Steinsalz.Box
-  -- other-modules:       
-  -- other-extensions:    
+  exposed-modules:     Crypto.Box.Curve25519XSalsa20Poly1305
   build-depends:       base >=4.8 && <5
                      , bytestring
   hs-source-dirs:      src

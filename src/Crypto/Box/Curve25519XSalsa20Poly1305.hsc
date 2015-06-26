@@ -1,4 +1,4 @@
-module Crypto.Steinsalz.Box
+module Crypto.Box.Curve25519XSalsa20Poly1305
   ( PublicKey ()
   , SecretKey ()
   , crypto_box
