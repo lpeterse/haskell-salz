@@ -36,10 +36,11 @@ library
   build-tools:         hsc2hs
   default-language:    Haskell2010
   include-dirs:        libsodium/src/libsodium/include/sodium
-  install-includes:    crypto_box.h
-                     , crypto_scalarmult_curve25519.h
+  install-includes:    crypto_box_curve25519xsalsa20poly1305.h
   c-sources:           libsodium/src/libsodium/crypto_box/crypto_box.c
                      , libsodium/src/libsodium/crypto_scalarmult/crypto_scalarmult.c
                      , libsodium/src/libsodium/crypto_scalarmult/curve25519/scalarmult_curve25519_api.c
                      , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/smult_curve25519_donna_c64.c
                      , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/base_curve25519_donna_c64.c
+                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/box_curve25519xsalsa20poly1305.c
+                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/before_curve25519xsalsa20poly1305.c
