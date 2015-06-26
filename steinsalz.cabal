@@ -6,7 +6,7 @@ description:
   on it as an installed system library. The relevant C code is included
   in the Haskell package.
   .
-  To avoid the accusation of having tinkered with the crypto primitives
+  In order to avoid the accusation of having tampered with the crypto primitives
   the git-repository includes `libsodium` only as a submodule. Build it
   from the repository if you don't trust me! The actual binding code
   can be reviewed for innocence with little effort.
@@ -19,13 +19,27 @@ copyright:           Copyright (c) Lars Petersen 2015
 category:            Cryptography
 build-type:          Simple
 extra-source-files:  README.md
+                     CHANGELOG.md
+                     CONTRIBUTORS.txt
+                     libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/smult_curve25519_donna_c64.c
 cabal-version:       >=1.10
 
 library
+  ghc-options:         -Wall
+  cc-options:          -O2 -DHAVE_TI_MODE
   exposed-modules:     Crypto.Steinsalz.Box
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.8 && <5
+                     , bytestring
   hs-source-dirs:      src
   build-tools:         hsc2hs
   default-language:    Haskell2010
+  include-dirs:        libsodium/src/libsodium/include/sodium
+  install-includes:    crypto_box.h
+                     , crypto_scalarmult_curve25519.h
+  c-sources:           libsodium/src/libsodium/crypto_box/crypto_box.c
+                     , libsodium/src/libsodium/crypto_scalarmult/crypto_scalarmult.c
+                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/scalarmult_curve25519_api.c
+                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/smult_curve25519_donna_c64.c
+                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/base_curve25519_donna_c64.c
