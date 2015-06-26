@@ -42,3 +42,6 @@ library
                      , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/base_curve25519_donna_c64.c
                      , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/box_curve25519xsalsa20poly1305.c
                      , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/before_curve25519xsalsa20poly1305.c
+                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/keypair_curve25519xsalsa20poly1305.c
+                     , libsodium/src/libsodium/randombytes/randombytes.c
+                     , libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c
