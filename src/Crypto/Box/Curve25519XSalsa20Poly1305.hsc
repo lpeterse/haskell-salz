@@ -27,7 +27,7 @@ newtype SecretKey
 
 newtype SharedKey
       = SharedKey ByteString
-
+      deriving (Eq, Ord, Show)
 
 keypair :: IO (SecretKey, PublicKey)
 keypair = do
