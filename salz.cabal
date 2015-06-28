@@ -21,40 +21,17 @@ build-type:          Simple
 extra-source-files:  README.md
                      CHANGELOG.md
                      CONTRIBUTORS.txt
-                     libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/smult_curve25519_donna_c64.c
 cabal-version:       >=1.10
 
 library
   ghc-options:         -Wall
-  cc-options:          -O2 -DHAVE_TI_MODE
   exposed-modules:     Crypto.Box.Curve25519XSalsa20Poly1305
   build-depends:       base >=4.8 && <5
                      , bytestring
                      , securemem >= 0.1.9
+                     , nonce >= 1.0.2
                      , crypto-box
   hs-source-dirs:      src
   build-tools:         hsc2hs
   default-language:    Haskell2010
-  include-dirs:        libsodium/src/libsodium/include/sodium
-  install-includes:    crypto_box_curve25519xsalsa20poly1305.h
-  c-sources:           libsodium/src/libsodium/crypto_box/crypto_box.c
-                     , libsodium/src/libsodium/crypto_box/crypto_box_easy.c
-                     , libsodium/src/libsodium/crypto_secretbox/crypto_secretbox_easy.c
-                     , libsodium/src/libsodium/crypto_stream/salsa20/stream_salsa20_api.c
-                     , libsodium/src/libsodium/crypto_stream/salsa20/ref/xor_salsa20_ref.c
-                     , libsodium/src/libsodium/crypto_scalarmult/crypto_scalarmult.c
-                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/scalarmult_curve25519_api.c
-                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/smult_curve25519_donna_c64.c
-                     , libsodium/src/libsodium/crypto_scalarmult/curve25519/donna_c64/base_curve25519_donna_c64.c
-                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/box_curve25519xsalsa20poly1305.c
-                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/before_curve25519xsalsa20poly1305.c
-                     , libsodium/src/libsodium/crypto_box/curve25519xsalsa20poly1305/ref/keypair_curve25519xsalsa20poly1305.c
-                     , libsodium/src/libsodium/sodium/utils.c
-                     , libsodium/src/libsodium/randombytes/randombytes.c
-                     , libsodium/src/libsodium/randombytes/sysrandom/randombytes_sysrandom.c
-                     , libsodium/src/libsodium/crypto_core/hsalsa20/ref2/core_hsalsa20.c
-                     , libsodium/src/libsodium/crypto_core/salsa20/ref/core_salsa20.c
-                     , libsodium/src/libsodium/crypto_onetimeauth/poly1305/donna/auth_poly1305_donna.c
-                     , libsodium/src/libsodium/crypto_onetimeauth/poly1305/onetimeauth_poly1305.c
-                     , libsodium/src/libsodium/crypto_onetimeauth/poly1305/onetimeauth_poly1305_try.c
-                     , libsodium/src/libsodium/crypto_onetimeauth/poly1305/onetimeauth_poly1305_api.c
+  extra-libraries:     sodium

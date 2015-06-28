@@ -8,6 +8,8 @@ module Crypto.Box.Curve25519XSalsa20Poly1305
 
 import Control.Exception
 
+import Crypto.Nonce as Nonce
+
 import Data.ByteString        as B
 import Data.ByteString.Unsafe as B
 import Data.SecureMem
@@ -32,6 +34,10 @@ newtype SharedKey
       = SharedKey SecureMem
       deriving (Eq, Show)
 
+newtype Nonce
+      = Nonce ByteString
+      deriving (Eq, Show)
+
 keypair :: IO (SecretKey, PublicKey)
 keypair = do
   p <-  allocateSecureMem pLen
@@ -48,29 +54,27 @@ beforenm :: SecretKey -> PublicKey -> SharedKey
 beforenm (SecretKey s) (PublicKey p) = unsafePerformIO $ do
   k <-  allocateSecureMem kLen
   _ <-  withSecureMemPtr k $ \kPtr->
-          withSecureMemPtr p $ \pPtr->
-            withSecureMemPtr s $ \sPtr->
-              crypto_box_beforenm kPtr pPtr sPtr
+        withSecureMemPtr p $ \pPtr->
+        withSecureMemPtr s $ \sPtr-> do
+          crypto_box_beforenm kPtr pPtr sPtr
   return (SharedKey k)
   where
     kLen = fromIntegral crypto_box_beforenmbytes
 
-afternm :: SharedKey -> ByteString -> IO ByteString
-afternm (SharedKey k) m = do
-  nc <- mask_ $ do
-    ptr <- mallocBytes ncLen
-    B.unsafePackMallocCStringLen (ptr, ncLen) `onException` free ptr
-  _  <- withSecureMemPtr k $ \kPtr->
-          unsafeUseAsCString nc $ \ncPtr->
-            unsafeUseAsCString m $ \mPtr-> do
-              let nPtr = ncPtr
-              let cPtr = ncPtr `plusPtr` nLen
-              crypto_box_easy_afternm cPtr mPtr (fromIntegral mLen) nPtr kPtr
-  return nc
+afternm :: ByteString -> Nonce -> SharedKey -> IO ByteString
+afternm m (Nonce n) (SharedKey k) = do
+  c  <- mask_ $ do
+    ptr <- mallocBytes cLen
+    B.unsafePackMallocCStringLen (ptr, cLen) `onException` free ptr
+  _  <- unsafeUseAsCString c $ \cPtr->
+        unsafeUseAsCString m $ \mPtr->
+        unsafeUseAsCString n $ \nPtr->
+        withSecureMemPtr   k $ \kPtr-> do
+          crypto_box_easy_afternm cPtr mPtr (fromIntegral mLen) nPtr kPtr
+  return c
   where
-    mLen  = B.length m
-    nLen  = fromIntegral crypto_box_noncebytes
-    ncLen = nLen + fromIntegral crypto_box_macbytes + mLen
+    mLen = B.length m
+    cLen = fromIntegral crypto_box_macbytes + mLen
 
 foreign import ccall unsafe "crypto_box_keypair"
   crypto_box_keypair           :: Ptr Word8 -> Ptr Word8 -> IO CInt
